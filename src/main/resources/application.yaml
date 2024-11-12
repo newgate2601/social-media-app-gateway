@@ -1,0 +1,72 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+          predicates:
+            - name: Path
+              args:
+                pattern: "'/services/' + serviceId + '/**'"
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: "'default'"
+                fallbackUri: "'forward:/fallback/default'"
+            - name: RewritePath
+              args:
+                regexp: "'/services/' + serviceId + '/?(?<remaining>.*)'"
+                replacement: "'/${remaining}'"
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    config-url: /v3/api-docs/swagger-config
+    path: /swagger-ui.html
+    urls:
+      -   name: gateway-service
+          url: /v3/api-docs
+  webjars:
+    prefix: ''
+
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 2s
+        cancel-running-future: false
+  circuitbreaker:
+    instances:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 100
+        permittedNumberOfCallsInHalfOpenState: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
