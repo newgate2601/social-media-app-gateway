@@ -14,8 +14,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 		ReactiveOAuth2ResourceServerAutoConfiguration.class})
 @EnableDiscoveryClient
 @OpenAPIDefinition(info = @Info(title = "GATEWAY API", version = "1.0"),
-        servers = {@Server(url = "/", description = "Default Server URL")},
-        security = {@SecurityRequirement(name = "Authorization")})
+		servers = {@Server(url = "/", description = "Default Server URL")},
+		security = {@SecurityRequirement(name = "Authorization")})
 public class SocialMediaAppGatewayApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SocialMediaAppGatewayApplication.class, args);

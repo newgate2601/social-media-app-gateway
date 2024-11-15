@@ -1,0 +1,196 @@
+##version: '3'
+#services:
+#  nginx:
+#    build:
+#      context: C:/Users/Lenovo/SpringBoot_Backend/learning2
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"  # Mở cổng 80 của container lên cổng 80 của máy chủ
+#    networks:
+#      - mynetwork
+#
+#  gateway:
+#    build:
+#      context: C:/Users/Lenovo/SpringBoot_Backend/social-media-app-gateway  # Path to the Dockerfile for the Gateway service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8081:8081"  # Expose Gateway on port 8080
+#    networks:
+#      - mynetwork
+#
+#  registry:
+#    build:
+#      context: C:/Users/Lenovo/SpringBoot_Backend/social-media-app-registry  # Path to the Dockerfile for the Registry service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8761:8761"  # Expose Registry on port 8761
+#    networks:
+#      - mynetwork
+#
+#  uaa:
+#    build:
+#      context: C:/Users/Lenovo/SpringBoot_Backend/social-media-app-uaa  # Path to the Dockerfile for the UAA service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8082:8082"  # Expose UAA on port 8082
+#    networks:
+#      - mynetwork
+#    depends_on:
+#      - uaa-db
+#
+#  post:
+#    build:
+#      context: C:/Users/Lenovo/SpringBoot_Backend/social-media-app-post  # Path to the Dockerfile for the UAA service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8088:8088"  # Expose UAA on port 8082
+#    networks:
+#      - mynetwork
+#    depends_on:
+#      - post-db
+#
+#  rtc1:
+#    build:
+#      context: C:/Users/Lenovo/SpringBoot_Backend/social-media-app-rtcomm  # Path to the Dockerfile for the UAA service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8086:8086"  # Expose UAA on port 8082
+#    networks:
+#      - mynetwork
+#    depends_on:
+#      - rtc-db
+#
+#  rtc2:
+#    build:
+#      context: C:/Users/Lenovo/SpringBoot_Backend/social-media-app-rtcomm  # Path to the Dockerfile for the UAA service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8087:8087"  # Expose UAA on port 8082
+#    networks:
+#      - mynetwork
+#    depends_on:
+#      - rtc-db
+#
+#  # PostgreSQL database for UAA
+#  uaa-db:
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_DB: social_media_app_uaa
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 101119
+#    networks:
+#      - mynetwork
+#
+#  # PostgreSQL database for registry
+#  post-db:
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_DB: social_media_app_post
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 101119
+#    networks:
+#      - mynetwork
+#
+#  rtc-db:
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_DB: social_media_app_rtcomm
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 101119
+#    networks:
+#      - mynetwork
+#
+#networks:
+#  mynetwork:
+#    driver: bridge  # Create a bridge network for communication between services
+
+services:
+  nginx:
+    image: newgate2601/social-media-app-gateway-nginx:latest  # Replace with the Docker Hub image for nginx
+    ports:
+      - "8080:8080"  # Map container port 8080 to host port 8080
+    networks:
+      - mynetwork
+
+  gateway:
+    image: newgate2601/social-media-app-gateway-gateway:latest  # Replace with the Docker Hub image for gateway
+    ports:
+      - "8081:8081"  # Expose Gateway on port 8081
+    networks:
+      - mynetwork
+
+  registry:
+    image: newgate2601/social-media-app-gateway-registry:latest  # Replace with the Docker Hub image for registry
+    ports:
+      - "8761:8761"  # Expose Registry on port 8761
+    networks:
+      - mynetwork
+
+  uaa:
+    image: newgate2601/social-media-app-gateway-uaa:latest  # Replace with the Docker Hub image for UAA
+    ports:
+      - "8082:8082"  # Expose UAA on port 8082
+    networks:
+      - mynetwork
+    depends_on:
+      - uaa-db
+
+  post:
+    image: newgate2601/social-media-app-gateway-post:latest  # Replace with the Docker Hub image for post
+    ports:
+      - "8088:8088"  # Expose post on port 8088
+    networks:
+      - mynetwork
+    depends_on:
+      - post-db
+
+  rtc1:
+    image: newgate2601/social-media-app-gateway-rtc1:latest  # Replace with the Docker Hub image for RTC1
+    ports:
+      - "8086:8086"  # Expose rtc1 on port 8086
+    networks:
+      - mynetwork
+    depends_on:
+      - rtc-db
+
+  rtc2:
+    image: newgate2601/social-media-app-gateway-rtc1:latest  # Replace with the Docker Hub image for RTC2
+    ports:
+      - "8087:8087"  # Expose rtc2 on port 8087
+    networks:
+      - mynetwork
+    depends_on:
+      - rtc-db
+
+  # PostgreSQL database for UAA
+  uaa-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: social_media_app_uaa
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 101119
+    networks:
+      - mynetwork
+
+  # PostgreSQL database for Post
+  post-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: social_media_app_post
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 101119
+    networks:
+      - mynetwork
+
+  rtc-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: social_media_app_rtcomm
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 101119
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge  # Create a bridge network for communication between services
