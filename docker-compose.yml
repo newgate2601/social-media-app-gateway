@@ -103,6 +103,7 @@
 #networks:
 #  mynetwork:
 #    driver: bridge  # Create a bridge network for communication between services
+# https://chatgpt.com/c/67373732-b208-8010-94ec-7500457c5a61
 
 services:
   nginx:
@@ -171,6 +172,8 @@ services:
       POSTGRES_PASSWORD: 101119
     networks:
       - mynetwork
+    volumes:
+      - uaa-data:/var/lib/postgresql/data
 
   # PostgreSQL database for Post
   post-db:
@@ -181,6 +184,8 @@ services:
       POSTGRES_PASSWORD: 101119
     networks:
       - mynetwork
+    volumes:
+      - post-data:/var/lib/postgresql/data
 
   rtc-db:
     image: postgres:latest
@@ -190,7 +195,14 @@ services:
       POSTGRES_PASSWORD: 101119
     networks:
       - mynetwork
+    volumes:
+      - rtc-data:/var/lib/postgresql/data
 
 networks:
   mynetwork:
     driver: bridge  # Create a bridge network for communication between services
+
+volumes:
+  uaa-data:
+  post-data:
+  rtc-data:
