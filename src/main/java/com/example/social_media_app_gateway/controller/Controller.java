@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("services/gateway/logout")
+@RequestMapping("/services/gateway")
 @AllArgsConstructor
 public class Controller {
     private final Service service;

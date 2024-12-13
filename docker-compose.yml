@@ -163,6 +163,15 @@ services:
     depends_on:
       - rtc-db
 
+  webpush:
+    image: newgate2601/social-media-app-gateway-webpush:latest  # Replace with the Docker Hub image for RTC2
+    ports:
+      - "8089:8089"  # Expose rtc2 on port 8087
+    networks:
+      - mynetwork
+    depends_on:
+      - web-push-db
+
   # PostgreSQL database for UAA
   uaa-db:
     image: postgres:latest
@@ -174,6 +183,17 @@ services:
       - mynetwork
     volumes:
       - uaa-data:/var/lib/postgresql/data
+
+  web-push-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: social_media_app_web_push
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 101119
+    networks:
+      - mynetwork
+    volumes:
+      - webpush-data:/var/lib/postgresql/data
 
   # PostgreSQL database for Post
   post-db:
