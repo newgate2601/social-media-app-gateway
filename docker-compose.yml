@@ -226,3 +226,4 @@ volumes:
   uaa-data:
   post-data:
   rtc-data:
+  webpush-data:
